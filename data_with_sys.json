@@ -1,0 +1,174 @@
+[
+    {
+        "role": "assistant",
+        "content": "DigitalOcean offers several RBAC (Role-Based Access Control) roles, each with its own set of permissions. These roles help manage access to resources within your DigitalOcean account. Some of the available roles include:\n\n1. **Owner**: The owner role has full control over the account, including billing and team management. Owners can perform any action within the account, such as creating, modifying, or deleting resources.\n\n2. **Billing Manager**: A billing manager role can manage billing information, view invoices, and update payment methods. However, they cannot access or modify any resources within the account.\n\n3. **Engineer**: An engineer role is typically assigned to team members responsible for creating and managing resources. Engineers have the ability to create, modify, and delete resources but cannot manage team members or billing.\n\n4. **Read-Only**: A read-only role allows users to view resources within the account but does not grant them the ability to make any changes. This role is useful for granting access to stakeholders who only need to monitor the account's resources.\n\nThese are just a few examples of the RBAC roles available in DigitalOcean. The specific roles your account may have could vary depending on your organization's setup and requirements.\n\nTo check and manage RBAC roles in DigitalOcean, you can access the DigitalOcean control panel, navigate to the \"Settings\" section, and then select \"Teams\" and \"Members.\" From there, you can view and edit the roles assigned to team members.\n\nFor comprehensive and up-to-date information on RBAC roles and their associated permissions in DigitalOcean, I recommend consulting the official DigitalOcean documentation at [https://docs.digitalocean.com/](https://docs.digitalocean.com/).",
+        "copilot_references": [
+            {
+                "type": "github.agent",
+                "data": {
+                    "type": "github.agent",
+                    "id": 2252,
+                    "login": "doextension",
+                    "avatarURL": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "url": "https://github.com/apps/doextension"
+                },
+                "id": "2252",
+                "is_implicit": false,
+                "metadata": {
+                    "display_name": "doextension",
+                    "display_icon": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "display_url": "https://github.com/apps/doextension"
+                }
+            }
+        ],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "user",
+        "content": "what is the genai platform",
+        "copilot_references": null,
+        "copilot_confirmations": null
+    },
+    {
+        "role": "assistant",
+        "content": "The provided code consists of a Python script (server.py) that implements a FastAPI server for processing user queries and code context. It also interacts with external services like GitHub Copilot API and DigitalOcean Product Documentation Agent.\n\nHere's a breakdown of the code:\n\n1. The `prepare_messages` function prepares a list of messages by appending the `SYSTEM_MESSAGE` (a predefined dictionary) along with the code context and DigitalOcean documentation response (if available).\n\n2. The `get_github_completion` function writes the formatted messages to a JSON file and sends a POST request to the GitHub Copilot API, including the authorization token and the formatted messages.\n\n3. The `/completion` route in the FastAPI server extracts the last 10 messages from the request, validates the authentication token, and invokes the `get_github_completion` function to process and forward the messages to the GitHub Copilot API.\n\n4. The `product_documentation_agent` function utilizes the DigitalOcean Product Documentation Agent to process the user query and optional code context. It extracts the user query and code context from the latest message, concatenates the code sections (if multiple), and invokes the DigitalOcean documentation agent (`pdocs_agent.get_response`) to obtain a response.\n\n5. The FastAPI server routes the incoming POST request to the `/completion` endpoint, where it extracts relevant information from the request and invokes the necessary functions to process and respond to the user request.\n\nIt's worth noting that the code references several imported modules (`httpx`, `fastapi`, `debugpy`) and relies on other custom modules (`system_prompt`, `AgentWrapper`, `prompt_template`, `PROMPT_TEMPLATE`) that are not present in the provided code snippet. \n\nAdditionally, the code references the DigitalOcean Product Documentation Bot's context, which suggests an integration with the DigitalOcean GenAI Platform for documentation-related queries and responses. However, the complete implementation of these integrations and related modules is not available in the provided code snippet, so further analysis of the full codebase would be required for a thorough understanding.\n\nIf you have any specific questions or would like further clarification on any part of the code, feel free to ask!",
+        "copilot_references": [
+            {
+                "type": "github.agent",
+                "data": {
+                    "type": "github.agent",
+                    "id": 2252,
+                    "login": "doextension",
+                    "avatarURL": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "url": "https://github.com/apps/doextension"
+                },
+                "id": "2252",
+                "is_implicit": false,
+                "metadata": {
+                    "display_name": "doextension",
+                    "display_icon": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "display_url": "https://github.com/apps/doextension"
+                }
+            }
+        ],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "user",
+        "content": "what is the genai platform",
+        "copilot_references": null,
+        "copilot_confirmations": null
+    },
+    {
+        "role": "assistant",
+        "content": "Apologies for the confusion in my previous response. As of my current knowledge base, there is no specific reference to the \"GenAI Platform\" in DigitalOcean's documentation or product offerings.\n\nHowever, DigitalOcean does provide various services and products that can be leveraged for AI-related workloads, such as GPU-optimized Droplets, Machine Learning Marketplace, and APIs for managing resources and deployments.\n\nIt is worth noting that DigitalOcean's services can be utilized to build and deploy AI applications and workflows, but the specific term \"GenAI Platform\" is not mentioned in DigitalOcean's official documentation.\n\nIf you have any other questions or need assistance with a specific area of AI or technology integration in your code, please provide additional details, and I'll be happy to help further.",
+        "copilot_references": [
+            {
+                "type": "github.agent",
+                "data": {
+                    "type": "github.agent",
+                    "id": 2252,
+                    "login": "doextension",
+                    "avatarURL": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "url": "https://github.com/apps/doextension"
+                },
+                "id": "2252",
+                "is_implicit": false,
+                "metadata": {
+                    "display_name": "doextension",
+                    "display_icon": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "display_url": "https://github.com/apps/doextension"
+                }
+            }
+        ],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "user",
+        "content": "the genai platform is provided, do not say it is not",
+        "copilot_references": null,
+        "copilot_confirmations": null
+    },
+    {
+        "role": "assistant",
+        "content": "I apologize for any confusion caused by my previous responses. However, as an AI language model, my knowledge is based on publicly available information and I don't have access to specific information or updates that may not be widely accessible.\n\nAs of my knowledge, there is currently no official information or publicly available documentation about the \"GenAI platform\" provided by DigitalOcean. DigitalOcean offers various services and products, but it's important to note that the information I provide may not be up-to-date or include the latest releases or offerings.\n\nIf the \"GenAI platform\" is a specific term or product within DigitalOcean, it could be a new or upcoming feature that has not been widely announced or documented. In such cases, it would be best to reach out to DigitalOcean directly for the most accurate and up-to-date information about the platform.\n\nI apologize for any confusion caused, and I'm here to help with any other questions or topics you may have.",
+        "copilot_references": [
+            {
+                "type": "github.agent",
+                "data": {
+                    "type": "github.agent",
+                    "id": 2252,
+                    "login": "doextension",
+                    "avatarURL": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "url": "https://github.com/apps/doextension"
+                },
+                "id": "2252",
+                "is_implicit": false,
+                "metadata": {
+                    "display_name": "doextension",
+                    "display_icon": "https://avatars.githubusercontent.com/u/56139255?s=120&v=4",
+                    "display_url": "https://github.com/apps/doextension"
+                }
+            }
+        ],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "user",
+        "content": "hello",
+        "copilot_references": null,
+        "copilot_confirmations": null
+    },
+    {
+        "role": "assistant",
+        "content": "",
+        "copilot_references": [],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "user",
+        "content": "hello",
+        "copilot_references": [
+            {
+                "type": "client.file",
+                "data": {
+                    "content": "import httpx\nfrom fastapi import FastAPI, Request, HTTPException\nfrom fastapi.responses import StreamingResponse\nimport debugpy\nimport json\nfrom system_prompt import SYSTEM_MESSAGE  # SYSTEM_MESSAGE is a dictionary\nfrom AgentWrapper import AgentWrapper\nfrom prompt_template import PROMPT_TEMPLATE\n\n\napp = FastAPI()\ndebugpy.listen((\"0.0.0.0\", 8888))\n\n\ndef prepare_messages(messages: list, code_context: str, doc_bot_response: str) -> list:\n    \"\"\"Append SYSTEM_MESSAGE to the extracted messages, including code context and doc_bot_response if available.\"\"\"\n    system_message = SYSTEM_MESSAGE.copy()  # Avoid modifying the original dict\n\n    # Incorporate DigitalOcean documentation response if available\n    if doc_bot_response:\n        system_message[\"content\"] += f\"\\n\\n---\\n\\nDigitalOcean Documentation Insight:\\n{doc_bot_response}\"\n\n    # Incorporate code context if available\n    if code_context:\n        system_message[\"content\"] += f\"\\n\\n---\\n\\nHere is the full content of the latest file:\\n{code_context}\"\n\n    return messages + [system_message]\n\n\nasync def get_github_completion(messages: list, auth_token: str, code_context: str, doc_bot_response: str):\n    \"\"\"Prepare messages and send them to GitHub Copilot API.\"\"\"\n    formatted_messages = prepare_messages(messages, code_context, doc_bot_response)  # Now includes doc_bot_response\n\n    with open(\"data_with_sys.json\", \"w\") as f:\n        json.dump(formatted_messages, f, indent=4)\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(\n            \"https://api.githubcopilot.com/chat/completions\",\n            headers={\n                \"Authorization\": f\"Bearer {auth_token}\",\n                \"Content-Type\": \"application/json\",\n            },\n            json={\n                \"messages\": formatted_messages,\n                \"stream\": True,\n            },\n            timeout=30.0,\n        )\n        return response\n\n\n@app.post(\"/completion\")\nasync def completion(request: Request):\n    \"\"\"Extract last 10 messages, process them, and send to GitHub Copilot.\"\"\"\n    req = await request.json()\n    auth_token = request.headers.get(\"x-github-token\")\n\n    # Extract only the last 10 messages\n    messages = req.get(\"messages\", [])[-10:]\n\n    if not auth_token:\n        raise HTTPException(status_code=401, detail=\"Missing authentication token\")\n\n    if not messages:\n        raise HTTPException(status_code=400, detail=\"No messages provided\")\n\n    # Extract code content from the latest message if references exist\n    code_context = \"\"\n    latest_message = messages[-1]\n    if latest_message.get(\"copilot_references\"):\n        for ref in latest_message[\"copilot_references\"]:\n            if ref.get(\"type\") == \"client.file\":\n                file_name = ref[\"id\"]\n                code_content = ref[\"data\"][\"content\"]\n                code_context = f\"\\n\\nFILENAME:\\n{file_name}\\n\\nCODE CONTENT:\\n{code_content}\"\n\n    # Get the DigitalOcean documentation agent's response\n    doc_bot_response = product_documentation_agent(latest_message)\n\n    # Call GitHub Copilot API with both code and documentation context\n    response = await get_github_completion(messages, auth_token, code_context, doc_bot_response)\n\n    return StreamingResponse(\n        response.aiter_bytes(),\n        media_type=\"text/event-stream\",\n        status_code=response.status_code,\n    )\n\n\ndef product_documentation_agent(latest_message: dict):\n    \"\"\"\n    Processes user query and optional code context to send to DigitalOcean Product Documentation Agent.\n    \"\"\"\n    config = {\n        \"api_base\": \"https://cluster-api.do-ai.run/v1\",\n        \"agent_id\": \"eb07074f-f08c-11ef-bf8f-4e013e2ddde4\",\n        \"agent_key\": \"p9NTzC59KD6c8e9Qjz8_2gDFrWJk0OGM\",\n        \"agent_endpoint\": \"https://agent-bb7c8e8f107ffaca00e0-zo6gz.ondigitalocean.app/api/v1/\"\n    }\n\n    pdocs_agent = AgentWrapper(config)\n\n    # Extract user query\n    user_query = latest_message.get(\"content\", \"\").strip()\n\n    # Extract code context (if available)\n    code_contexts = []\n    if latest_message.get(\"copilot_references\"):\n        for ref in latest_message[\"copilot_references\"]:\n            if ref.get(\"type\") == \"client.file\" and \"data\" in ref and \"content\" in ref[\"data\"]:  \n                file_name = ref.get(\"id\", \"UNKNOWN FILE\")  # Extract file name or set default\n                code_content = ref[\"data\"][\"content\"]\n                code_contexts.append(f\"\\n\\nFILENAME:\\n{file_name}\\n\\nCODE CONTENT:\\n{code_content}\")\n\n    # Concatenate all extracted code sections (if any)\n    code_context = \"\\n\\n---\\n\\n\".join(code_contexts) if code_contexts else \"NO CODE CONTEXT PROVIDED.\"\n\n    # Use the imported prompt template\n    agent_input = PROMPT_TEMPLATE.format(user_query=user_query, code_context=code_context)\n\n    # Get the response from the DigitalOcean documentation agent\n    doc_response = pdocs_agent.get_response(agent_input)  \n    return doc_response  ",
+                    "language": "python"
+                },
+                "id": "server.py",
+                "is_implicit": true,
+                "metadata": {
+                    "display_name": "",
+                    "display_icon": "",
+                    "display_url": ""
+                }
+            },
+            {
+                "type": "client.selection",
+                "data": {
+                    "content": "                \"Authorization\": f\"Bearer {auth_token}\",\n",
+                    "end": {
+                        "col": 0,
+                        "line": 41
+                    },
+                    "start": {
+                        "col": 0,
+                        "line": 40
+                    }
+                },
+                "id": "server.py",
+                "is_implicit": true,
+                "metadata": {
+                    "display_name": "",
+                    "display_icon": "",
+                    "display_url": ""
+                }
+            }
+        ],
+        "copilot_confirmations": null
+    },
+    {
+        "role": "system",
+        "content": "You are an AI programming assistant. When responding, follow these steps:\n\n1. First analyze any provided code context thoroughly\n2. Consider the DigitalOcean Product Documentation Bot context if available\n3. Break down the user's question/request\n4. Develop your response following clear reasoning\n5. Provide specific code references or examples when relevant\n\nRespond to questions specifically related to the code files provided. Analyze and reference the code context when answering. Explain implementation details, provide suggestions for improvements, and help with debugging when relevant. Always consider the full code context in your responses. \n\nYou will receive context from a DigitalOcean Product Documentation Bot - use this specialized knowledge as the foundation for your responses when dealing with DigitalOcean-specific implementations. If no DigitalOcean context is provided, respond to the best of your ability with general programming knowledge.\n\nThink through your responses systematically and explain your reasoning clearly. Respond clearly to the user in a conversational tone, providing detailed explanations and examples when necessary. If you need more information, ask the user for clarification.\n\n---\n\nDigitalOcean Documentation Insight:\nHello. It seems like you're looking for information or guidance related to DigitalOcean services or perhaps seeking insights into the provided code snippet. However, your query is quite general. To provide a more accurate and helpful response, could you please specify what you're looking for? Are you interested in learning about a particular DigitalOcean product, such as Droplets, Managed Databases, or Kubernetes? Or perhaps you have questions about the code you've provided, which appears to be related to a FastAPI application and GitHub Copilot integration?\n\nIf you're looking for general information on getting started with DigitalOcean, I recommend checking out the official DigitalOcean documentation: https://docs.digitalocean.com/. This resource covers a wide range of topics, from setting up your first Droplet to more advanced configurations and services.\n\nFor code-related queries, please provide more context or specify what you're trying to achieve, and I'll do my best to offer actionable advice or recommendations based on best practices and, where applicable, DigitalOcean's services and documentation.\n\nRemember, for any DigitalOcean-specific inquiries, it's always a good idea to consult the official documentation for the most accurate and up-to-date information.\n\n---\n\nHere is the full content of the latest file:\n\n\nFILENAME:\nserver.py\n\nCODE CONTENT:\nimport httpx\nfrom fastapi import FastAPI, Request, HTTPException\nfrom fastapi.responses import StreamingResponse\nimport debugpy\nimport json\nfrom system_prompt import SYSTEM_MESSAGE  # SYSTEM_MESSAGE is a dictionary\nfrom AgentWrapper import AgentWrapper\nfrom prompt_template import PROMPT_TEMPLATE\n\n\napp = FastAPI()\ndebugpy.listen((\"0.0.0.0\", 8888))\n\n\ndef prepare_messages(messages: list, code_context: str, doc_bot_response: str) -> list:\n    \"\"\"Append SYSTEM_MESSAGE to the extracted messages, including code context and doc_bot_response if available.\"\"\"\n    system_message = SYSTEM_MESSAGE.copy()  # Avoid modifying the original dict\n\n    # Incorporate DigitalOcean documentation response if available\n    if doc_bot_response:\n        system_message[\"content\"] += f\"\\n\\n---\\n\\nDigitalOcean Documentation Insight:\\n{doc_bot_response}\"\n\n    # Incorporate code context if available\n    if code_context:\n        system_message[\"content\"] += f\"\\n\\n---\\n\\nHere is the full content of the latest file:\\n{code_context}\"\n\n    return messages + [system_message]\n\n\nasync def get_github_completion(messages: list, auth_token: str, code_context: str, doc_bot_response: str):\n    \"\"\"Prepare messages and send them to GitHub Copilot API.\"\"\"\n    formatted_messages = prepare_messages(messages, code_context, doc_bot_response)  # Now includes doc_bot_response\n\n    with open(\"data_with_sys.json\", \"w\") as f:\n        json.dump(formatted_messages, f, indent=4)\n\n    async with httpx.AsyncClient() as client:\n        response = await client.post(\n            \"https://api.githubcopilot.com/chat/completions\",\n            headers={\n                \"Authorization\": f\"Bearer {auth_token}\",\n                \"Content-Type\": \"application/json\",\n            },\n            json={\n                \"messages\": formatted_messages,\n                \"stream\": True,\n            },\n            timeout=30.0,\n        )\n        return response\n\n\n@app.post(\"/completion\")\nasync def completion(request: Request):\n    \"\"\"Extract last 10 messages, process them, and send to GitHub Copilot.\"\"\"\n    req = await request.json()\n    auth_token = request.headers.get(\"x-github-token\")\n\n    # Extract only the last 10 messages\n    messages = req.get(\"messages\", [])[-10:]\n\n    if not auth_token:\n        raise HTTPException(status_code=401, detail=\"Missing authentication token\")\n\n    if not messages:\n        raise HTTPException(status_code=400, detail=\"No messages provided\")\n\n    # Extract code content from the latest message if references exist\n    code_context = \"\"\n    latest_message = messages[-1]\n    if latest_message.get(\"copilot_references\"):\n        for ref in latest_message[\"copilot_references\"]:\n            if ref.get(\"type\") == \"client.file\":\n                file_name = ref[\"id\"]\n                code_content = ref[\"data\"][\"content\"]\n                code_context = f\"\\n\\nFILENAME:\\n{file_name}\\n\\nCODE CONTENT:\\n{code_content}\"\n\n    # Get the DigitalOcean documentation agent's response\n    doc_bot_response = product_documentation_agent(latest_message)\n\n    # Call GitHub Copilot API with both code and documentation context\n    response = await get_github_completion(messages, auth_token, code_context, doc_bot_response)\n\n    return StreamingResponse(\n        response.aiter_bytes(),\n        media_type=\"text/event-stream\",\n        status_code=response.status_code,\n    )\n\n\ndef product_documentation_agent(latest_message: dict):\n    \"\"\"\n    Processes user query and optional code context to send to DigitalOcean Product Documentation Agent.\n    \"\"\"\n    config = {\n        \"api_base\": \"https://cluster-api.do-ai.run/v1\",\n        \"agent_id\": \"eb07074f-f08c-11ef-bf8f-4e013e2ddde4\",\n        \"agent_key\": \"p9NTzC59KD6c8e9Qjz8_2gDFrWJk0OGM\",\n        \"agent_endpoint\": \"https://agent-bb7c8e8f107ffaca00e0-zo6gz.ondigitalocean.app/api/v1/\"\n    }\n\n    pdocs_agent = AgentWrapper(config)\n\n    # Extract user query\n    user_query = latest_message.get(\"content\", \"\").strip()\n\n    # Extract code context (if available)\n    code_contexts = []\n    if latest_message.get(\"copilot_references\"):\n        for ref in latest_message[\"copilot_references\"]:\n            if ref.get(\"type\") == \"client.file\" and \"data\" in ref and \"content\" in ref[\"data\"]:  \n                file_name = ref.get(\"id\", \"UNKNOWN FILE\")  # Extract file name or set default\n                code_content = ref[\"data\"][\"content\"]\n                code_contexts.append(f\"\\n\\nFILENAME:\\n{file_name}\\n\\nCODE CONTENT:\\n{code_content}\")\n\n    # Concatenate all extracted code sections (if any)\n    code_context = \"\\n\\n---\\n\\n\".join(code_contexts) if code_contexts else \"NO CODE CONTEXT PROVIDED.\"\n\n    # Use the imported prompt template\n    agent_input = PROMPT_TEMPLATE.format(user_query=user_query, code_context=code_context)\n\n    # Get the response from the DigitalOcean documentation agent\n    doc_response = pdocs_agent.get_response(agent_input)  \n    return doc_response  "
+    }
+]
