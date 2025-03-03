@@ -3,7 +3,6 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import StreamingResponse, Response
 import debugpy
 import json
-from system_prompt import SYSTEM_MESSAGE  # SYSTEM_MESSAGE is a dictionary
 from AgentWrapper import AgentWrapper
 from prompt_template import PROMPT_TEMPLATE
 import asyncio
@@ -39,7 +38,7 @@ async def completion(request: Request):
 
     # Start streaming immediately
     async def stream_response():
-        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Processing...\"}}]}\n\n"
+        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"\"}}]}\n\n"
         await asyncio.sleep(0.05)
 
         # Call the DigitalOcean Product Documentation Agent asynchronously
