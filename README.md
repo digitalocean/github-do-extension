@@ -64,7 +64,7 @@ The original idea was to:
 - By **replicating Copilot’s streaming format**, we successfully **rendered responses** in the Copilot Chat UI **without** relying on GitHub’s API.  
 
 ## **Current Challenges**  
-While short responses work, **longer or complex queries trigger errors**, such as:  
+While short responses work for now, **longer or complex queries (including attached full code) trigger errors**, such as:  
 - **“Internal agent error”**  
 - **“GitHub was unable to connect to ‘doextension’”**  
 
