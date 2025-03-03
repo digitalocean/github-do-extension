@@ -39,7 +39,7 @@ These indicate **possible issues with**:
 3. **Streaming Issues** – The response stream **might not be keeping Copilot’s connection alive properly**.  
 
 ## **Next Steps**  
-- **Understand what was triggering those error messages
+- **Understand what was triggering those error messages** as we need to accommodate longer more complex queries for this extension to work with zero exceptions.
 - **Ensure immediate response streaming** to **keep the connection open** while waiting for the DigitalOcean agent.  
 - **Investigate timeouts** and **adjust FastAPI/Uvicorn settings** to prevent premature disconnections.  
 - **Optimize response chunking** to handle **longer** DigitalOcean agent outputs **without truncation**.  
