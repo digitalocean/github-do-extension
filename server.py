@@ -6,79 +6,73 @@ import json
 from system_prompt import SYSTEM_MESSAGE  # SYSTEM_MESSAGE is a dictionary
 from AgentWrapper import AgentWrapper
 from prompt_template import PROMPT_TEMPLATE
-from typing import AsyncGenerator
 import asyncio
-import time
-from fastapi.responses import JSONResponse
 import logging
-
 
 logging.basicConfig(level=logging.INFO)
 
-
 app = FastAPI()
 debugpy.listen(("0.0.0.0", 8888))
-
 
 @app.post("/completion")
 async def completion(request: Request):
     """Process GitHub Copilot request and send streamed response."""
 
-    logging.info("✅ GitHub Copilot connected: Processing request...")
+    logging.info("GitHub Copilot connected: Processing request...")
 
-    # ✅ Extract request data
+    # Extract request data
     req = await request.json()
     auth_token = request.headers.get("x-github-token")
     messages = req.get("messages", [])
 
-    # ✅ Validate request
+    # Validate request
     if not auth_token:
-        logging.error("❌ Missing authentication token.")
+        logging.error("Missing authentication token.")
         raise HTTPException(status_code=401, detail="Missing authentication token")
 
     if not messages:
-        logging.error("❌ No messages provided.")
+        logging.error("No messages provided.")
         raise HTTPException(status_code=400, detail="No messages provided")
 
     latest_message = messages[-1]
-    logging.info(f"✅ Successfully received messages: {latest_message['content'][:50]}...")
+    logging.info(f"Successfully received messages: {latest_message['content'][:50]}...")
 
-    # ✅ Start streaming immediately
+    # Start streaming immediately
     async def stream_response():
-        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Processing...\"}}]}\n\n"  # ✅ Immediate response
+        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Processing...\"}}]}\n\n"
         await asyncio.sleep(0.05)
 
-        # ✅ Call the DigitalOcean Product Documentation Agent asynchronously
+        # Call the DigitalOcean Product Documentation Agent asynchronously
         agent_response = await product_documentation_agent(latest_message)
 
-        # ✅ Split response into words instead of fixed characters
+        # Split response into words instead of fixed characters
         def chunk_text(text):
-            words = text.split()  # ✅ Split by words to avoid bad substrings
-            return words if words else [text]  # ✅ Ensure empty response doesn't break streaming
+            words = text.split()
+            return words if words else [text]
 
         response_chunks = chunk_text(agent_response)
 
-        # ✅ Stream response to prevent GitHub timeout
+        # Stream response to prevent GitHub timeout
         for chunk in response_chunks:
             if chunk.strip():
-                msg = {"choices": [{"index": 0, "delta": {"content": chunk + " "}}]}  # ✅ Add space to avoid merging words
+                msg = {"choices": [{"index": 0, "delta": {"content": chunk + " "}}]}
                 json_chunk = f"data: {json.dumps(msg, separators=(',', ':'))}\n\n".encode("utf-8")
-                logging.info(f"📤 Streaming chunk: {json_chunk.decode('utf-8')}")
+                logging.info(f"Streaming chunk: {json_chunk.decode('utf-8')}")
                 yield json_chunk
                 await asyncio.sleep(0.05)
 
-        # ✅ Keep-alive message before stopping
+        # Keep-alive message before stopping
         yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\" \"}}]}\n\n"
         await asyncio.sleep(0.1)
 
-        # ✅ Send final stop message
+        # Send final stop message
         final_chunk = b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":null},\"finish_reason\":\"stop\"}]}\n\n"
         yield final_chunk
         await asyncio.sleep(0.05)
 
-        # ✅ Properly terminate stream
+        # Properly terminate stream
         done_chunk = b"data: [DONE]\n\n"
-        logging.info(f"📤 Streaming final termination: {done_chunk.decode('utf-8')}")
+        logging.info(f"Streaming final termination: {done_chunk.decode('utf-8')}")
         yield done_chunk
 
     return StreamingResponse(
@@ -90,9 +84,6 @@ async def completion(request: Request):
             "Keep-Alive": "timeout=600"
         }
     )
-
- 
-
 
 async def product_documentation_agent(latest_message: dict):
     """
