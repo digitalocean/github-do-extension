@@ -1,4 +1,42 @@
-# **DigitalOcean GitHub Copilot Extension**  
+# **DigitalOcean GitHub Copilot Extension** 
+
+# How to Run and Set Up Forwarding URL
+
+## Running the Application
+
+To start the application, follow these steps:
+
+1. **Ensure you have Python 3.10+ installed.**  
+2. **Install dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. **Run the FastAPI application using Uvicorn:**
+   ```sh
+   uvicorn server:app --host 0.0.0.0 --port 8000 --timeout-keep-alive 600 --log-level info
+   ```
+
+---
+
+## Setting Up the Forwarding URL
+
+To integrate this extension with **GitHub Copilot**, follow these steps:
+
+1. **Go to Developer Settings** in your GitHub App.  
+2. **Paste the forwarding URL** into the **Agent URL** under Copilot settings.  
+3. **Obtain the URL** from one of the following sources:
+
+   - **Ngrok**: If using Ngrok, run:
+     ```sh
+     ngrok http 8000
+     ```
+     Copy the **generated HTTPS forwarding URL** and paste it into the **Agent URL** field.
+
+   - **App Platform**: If deploying on **DigitalOcean App Platform**, use the assigned **public URL**.
+
+Once configured, GitHub Copilot will send requests to your extension, enabling **real-time responses** within the Copilot chat UI.
+```
+
 
 ## **Overview**  
 We are developing a **DigitalOcean Extension for GitHub Copilot**, enabling users to interact directly with a **DigitalOcean agent** that specializes in:  
