@@ -35,7 +35,6 @@ To integrate this extension with **GitHub Copilot**, follow these steps:
    - **App Platform**: If deploying on **DigitalOcean App Platform**, use the assigned **public URL**.
 
 Once configured, GitHub Copilot will send requests to your extension, enabling **real-time responses** within the Copilot chat UI.
-```
 
 
 ## **Overview**  
