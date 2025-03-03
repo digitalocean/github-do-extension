@@ -214,8 +214,8 @@ class AgentWrapper:
     8.1. **User Query:** "How do I create a Managed PostgreSQL database on DigitalOcean?"
     8.2. **Correct Response:** "To create a Managed PostgreSQL database, navigate to the Databases section in the DigitalOcean Control Panel, select PostgreSQL, configure your settings, and deploy. More details can be found here: https://docs.digitalocean.com/products/databases/postgresql/how-to/create/"
     8.3. **Incorrect Response That Violates This Prompt (Must Never Happen):**  
-        ❌ "You can try installing PostgreSQL manually on a Droplet and configure replication yourself." (This is speculative and not from DigitalOcean documentation.)  
-        ❌ "Check out this guide: https://docs.digitalocean.com/databases/postgresql-setup" (This URL is fabricated and does not exist.)
+         "You can try installing PostgreSQL manually on a Droplet and configure replication yourself." (This is speculative and not from DigitalOcean documentation.)  
+         "Check out this guide: https://docs.digitalocean.com/databases/postgresql-setup" (This URL is fabricated and does not exist.)
 
     9. Response hierarchy:
     9.1. First priority: Direct documentation information.
