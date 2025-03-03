@@ -1,7 +1,5 @@
 # **DigitalOcean GitHub Copilot Extension** 
 
-# How to Run and Set Up Forwarding URL
-
 ## Running the Application
 
 To start the application, follow these steps:
