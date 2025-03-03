@@ -1,94 +1,100 @@
 import httpx
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, Response
 import debugpy
 import json
 from system_prompt import SYSTEM_MESSAGE  # SYSTEM_MESSAGE is a dictionary
 from AgentWrapper import AgentWrapper
 from prompt_template import PROMPT_TEMPLATE
+from typing import AsyncGenerator
+import asyncio
+import time
+from fastapi.responses import JSONResponse
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 app = FastAPI()
 debugpy.listen(("0.0.0.0", 8888))
 
 
-def prepare_messages(messages: list, code_context: str, doc_bot_response: str) -> list:
-    """Append SYSTEM_MESSAGE to the extracted messages, including code context and doc_bot_response if available."""
-    system_message = SYSTEM_MESSAGE.copy()  # Avoid modifying the original dict
-
-    # Incorporate DigitalOcean documentation response if available
-    if doc_bot_response:
-        system_message["content"] += f"\n\n---\n\nDigitalOcean Documentation Insight:\n{doc_bot_response}"
-
-    # Incorporate code context if available
-    if code_context:
-        system_message["content"] += f"\n\n---\n\nHere is the full content of the latest file:\n{code_context}"
-
-    return messages + [system_message]
-
-
-async def get_github_completion(messages: list, auth_token: str, code_context: str, doc_bot_response: str):
-    """Prepare messages and send them to GitHub Copilot API."""
-    formatted_messages = prepare_messages(messages, code_context, doc_bot_response)  # Now includes doc_bot_response
-
-    with open("data_with_sys.json", "w") as f:
-        json.dump(formatted_messages, f, indent=4)
-
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://api.githubcopilot.com/chat/completions",
-            headers={
-                "Authorization": f"Bearer {auth_token}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "messages": formatted_messages,
-                "stream": True,
-            },
-            timeout=30.0,
-        )
-        return response
-
-
 @app.post("/completion")
 async def completion(request: Request):
-    """Extract last 10 messages, process them, and send to GitHub Copilot."""
+    """Process GitHub Copilot request and send streamed response."""
+
+    logging.info("✅ GitHub Copilot connected: Processing request...")
+
+    # ✅ Extract request data
     req = await request.json()
     auth_token = request.headers.get("x-github-token")
+    messages = req.get("messages", [])
 
-    # Extract only the last 10 messages
-    messages = req.get("messages", [])[-10:]
-
+    # ✅ Validate request
     if not auth_token:
+        logging.error("❌ Missing authentication token.")
         raise HTTPException(status_code=401, detail="Missing authentication token")
 
     if not messages:
+        logging.error("❌ No messages provided.")
         raise HTTPException(status_code=400, detail="No messages provided")
 
-    # Extract code content from the latest message if references exist
-    code_context = ""
     latest_message = messages[-1]
-    if latest_message.get("copilot_references"):
-        for ref in latest_message["copilot_references"]:
-            if ref.get("type") == "client.file":
-                file_name = ref["id"]
-                code_content = ref["data"]["content"]
-                code_context = f"\n\nFILENAME:\n{file_name}\n\nCODE CONTENT:\n{code_content}"
+    logging.info(f"✅ Successfully received messages: {latest_message['content'][:50]}...")
 
-    # Get the DigitalOcean documentation agent's response
-    doc_bot_response = product_documentation_agent(latest_message)
+    # ✅ Start streaming immediately
+    async def stream_response():
+        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Processing...\"}}]}\n\n"  # ✅ Immediate response
+        await asyncio.sleep(0.05)
 
-    # Call GitHub Copilot API with both code and documentation context
-    response = await get_github_completion(messages, auth_token, code_context, doc_bot_response)
+        # ✅ Call the DigitalOcean Product Documentation Agent asynchronously
+        agent_response = await product_documentation_agent(latest_message)
+
+        # ✅ Split response into words instead of fixed characters
+        def chunk_text(text):
+            words = text.split()  # ✅ Split by words to avoid bad substrings
+            return words if words else [text]  # ✅ Ensure empty response doesn't break streaming
+
+        response_chunks = chunk_text(agent_response)
+
+        # ✅ Stream response to prevent GitHub timeout
+        for chunk in response_chunks:
+            if chunk.strip():
+                msg = {"choices": [{"index": 0, "delta": {"content": chunk + " "}}]}  # ✅ Add space to avoid merging words
+                json_chunk = f"data: {json.dumps(msg, separators=(',', ':'))}\n\n".encode("utf-8")
+                logging.info(f"📤 Streaming chunk: {json_chunk.decode('utf-8')}")
+                yield json_chunk
+                await asyncio.sleep(0.05)
+
+        # ✅ Keep-alive message before stopping
+        yield b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\" \"}}]}\n\n"
+        await asyncio.sleep(0.1)
+
+        # ✅ Send final stop message
+        final_chunk = b"data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":null},\"finish_reason\":\"stop\"}]}\n\n"
+        yield final_chunk
+        await asyncio.sleep(0.05)
+
+        # ✅ Properly terminate stream
+        done_chunk = b"data: [DONE]\n\n"
+        logging.info(f"📤 Streaming final termination: {done_chunk.decode('utf-8')}")
+        yield done_chunk
 
     return StreamingResponse(
-        response.aiter_bytes(),
-        media_type="text/event-stream",
-        status_code=response.status_code,
+        stream_response(), 
+        media_type="text/event-stream", 
+        status_code=200, 
+        headers={
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=600"
+        }
     )
 
+ 
 
-def product_documentation_agent(latest_message: dict):
+
+async def product_documentation_agent(latest_message: dict):
     """
     Processes user query and optional code context to send to DigitalOcean Product Documentation Agent.
     """
@@ -109,7 +115,7 @@ def product_documentation_agent(latest_message: dict):
     if latest_message.get("copilot_references"):
         for ref in latest_message["copilot_references"]:
             if ref.get("type") == "client.file" and "data" in ref and "content" in ref["data"]:  
-                file_name = ref.get("id", "UNKNOWN FILE")  # Extract file name or set default
+                file_name = ref.get("id", "UNKNOWN FILE")
                 code_content = ref["data"]["content"]
                 code_contexts.append(f"\n\nFILENAME:\n{file_name}\n\nCODE CONTENT:\n{code_content}")
 
@@ -119,6 +125,10 @@ def product_documentation_agent(latest_message: dict):
     # Use the imported prompt template
     agent_input = PROMPT_TEMPLATE.format(user_query=user_query, code_context=code_context)
 
-    # Get the response from the DigitalOcean documentation agent
-    doc_response = pdocs_agent.get_response(agent_input)  
-    return doc_response  
+    # Make the actual call async
+    doc_response = await pdocs_agent.get_response(agent_input)
+
+    print(doc_response)
+
+    logging.info(doc_response)
+    return doc_response
