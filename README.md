@@ -1,7 +1,3 @@
-Here's your README draft:  
-
----
-
 # **DigitalOcean GitHub Copilot Extension**  
 
 ## **Overview**  
