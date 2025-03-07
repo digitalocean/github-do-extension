@@ -4,3 +4,4 @@ httpx
 debugpy
 pyjwt
 openai
+python-dotenv
