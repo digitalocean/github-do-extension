@@ -7,6 +7,11 @@ from AgentWrapper import AgentWrapper
 from prompt_template import PROMPT_TEMPLATE
 import asyncio
 import logging
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 
@@ -89,11 +94,16 @@ async def product_documentation_agent(latest_message: dict):
     Processes user query and optional code context to send to DigitalOcean Product Documentation Agent.
     """
     config = {
-        "api_base": "https://cluster-api.do-ai.run/v1",
-        "agent_id": "eb07074f-f08c-11ef-bf8f-4e013e2ddde4",
-        "agent_key": "p9NTzC59KD6c8e9Qjz8_2gDFrWJk0OGM",
-        "agent_endpoint": "https://agent-bb7c8e8f107ffaca00e0-zo6gz.ondigitalocean.app/api/v1/"
+        "api_base": os.getenv("AGENT_API_BASE", "https://cluster-api.do-ai.run/v1"),
+        "agent_id": os.getenv("AGENT_ID", ""),
+        "agent_key": os.getenv("AGENT_KEY", ""),
+        "agent_endpoint": os.getenv("AGENT_ENDPOINT", "")
     }
+
+    # Validate required environment variables
+    if not config["agent_id"] or not config["agent_key"] or not config["agent_endpoint"]:
+        logging.error("Missing required environment variables for agent configuration.")
+        return "Error: Agent configuration incomplete. Please check environment variables."
 
     pdocs_agent = AgentWrapper(config)
 
